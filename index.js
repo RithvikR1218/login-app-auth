@@ -2,6 +2,16 @@ const express = require("express")
 const mongoose = require("mongoose") // new
 const routes = require("./routes/user") // new
 
+var cors = require('cors')
+var app = express()
+app.use(cors(
+	{
+		credentials: true,
+		origin: 'http://127.0.0.1:5500'
+	}
+))
+// app.options('*', cors());
+
 // Connect to MongoDB database
 mongoose
 	.connect("mongodb://localhost:27017/auth", { useNewUrlParser: true })
