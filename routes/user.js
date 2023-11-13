@@ -253,12 +253,6 @@ router.get("/home", (req,res)=>{
 
 			/////////////////////////////////////////
 
-			.movie-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-				gap: 20px;
-			}
-
 			.movie-card {
 				position: relative;
 				perspective: 1000px;
@@ -335,13 +329,11 @@ router.get("/home", (req,res)=>{
 			/////////////////////////////////////////
 
 			
-			// .header {
-			// 	background-color: #333;
-			// 	color: #fff;
-			// 	display: flex;
-			// 	justify-content: space-between;
-			// 	align-items: center;
-			// }
+			.header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
 			
 			.header h1 {
 				padding:5px;
@@ -377,10 +369,31 @@ router.get("/home", (req,res)=>{
 				max-width: 100%;
 			}
 			
-			.top-buttons {
+			.top-buttone {
 				position: absolute;
-				top: 50px;
+				top: 90px;
 				left: 50px;
+				padding: 10px 20px;
+				font-size: 16px;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				margin-bottom: 10px;
+				cursor: pointer;
+			}
+
+
+			.top-buttwo {
+				position: absolute;
+				top: 400px;
+				left: 50px;
+				padding: 10px 20px;
+				font-size: 16px;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				margin-bottom: 10px;
+				cursor: pointer;
 			}
 			
 			
@@ -403,17 +416,18 @@ router.get("/home", (req,res)=>{
 				align-items: center;
 			}
 			
-			.top-buttons{
-				padding: 10px 20px;
-				font-size: 16px;
-				//background-color: #333;
-				color: #fff;
-				border: none;
-				border-radius: 5px;
-				margin-bottom: 10px;
-				cursor: pointer;
+			.head-one{
+				position: absolute;
+				top: 10px;
+				left: 80px;
 			}
-			
+
+			.head-two{
+				position: absolute;
+				top: 320px;
+				left: 80px;
+			}
+
 			.video-container{
 				position: absolute;
 				size: 400rem;
@@ -421,13 +435,6 @@ router.get("/home", (req,res)=>{
 				margin: 0;
 				bottom: 15rem;
 			}
-
-			// .video-container {
-			// 	display: flex;
-			// 	justify-content: center;
-			// 	align-items: center;
-			// 	//height: 100vh; /* Set the height to occupy the full viewport height */
-			// }
 			
 			
 			#videoPlayer{
@@ -437,18 +444,12 @@ router.get("/home", (req,res)=>{
 			///////////////////////////////
 
 			.movie-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-				gap: 20px;
+				display: block;
 				margin-bottom: 20px; /* Add margin at the bottom for spacing */
 			}
 		
 			.video-container {
-				// margin: 0;
-    			// padding: 0;
-    			// box-sizing: border-box;
 				display: flex;
-				//justify-content: center;
 				align-items: center;
 				height: calc(100vh - 1200px); /* Adjust the height to occupy the remaining space */
 				position: relative;
@@ -489,10 +490,21 @@ router.get("/home", (req,res)=>{
 				<img src="https://firebasestorage.googleapis.com/v0/b/dbms-project-ac358.appspot.com/o/abc.png?alt=media&token=bd3ab80a-b81b-4a45-be85-57a5261f558e" 
 				alt="Video Streaming Background">
 				
-				<div class="top-buttons" id="movie-list">
-					<!-- Movie data -->
+				<div>
+					<h1 class="head-one" style="color: #fff">Movies</h1>
+					<div class="top-buttone movie-grid" id="movie-list">
+						<!-- Movie data -->
+					</div>
 				</div>
-				
+
+				<div>
+					<h1 class="head-two" style="color: #fff">TV Shows</h1>
+					<div class="top-buttwo movie-grid" id="tv-list">
+						<!-- TV Show data -->
+					</div>
+				</div>
+
+
 				<div class="video-container">
 					<video id="videoPlayer" controls>
 						<source src="" type="video/mp4">
@@ -547,6 +559,7 @@ router.get("/home", (req,res)=>{
 				];
 
 				// Function to fetch movie data
+
 				function fetchMovieData() {
 					fetch('http://localhost:8080/movie/show', {
 						method: 'GET',
@@ -559,7 +572,6 @@ router.get("/home", (req,res)=>{
 
 						const movieList = document.getElementById('movie-list');
 						movieList.innerHTML = ''; // Clear previous data
-						movieList.classList.add('movie-grid'); // Apply grid layout to the movie list
 
 
 						data.forEach(movie => {
@@ -592,7 +604,7 @@ router.get("/home", (req,res)=>{
 		
 							const back = document.createElement('div');
 							back.classList.add('back');
-							back.innerHTML = \`
+							back.innerHTML =\`
 								<p>Title: \${movie.title}</p>
 								<p>Director: \${movie.director}</p>
 								<p>Rating: \${movie.rating}</p>
@@ -614,6 +626,64 @@ router.get("/home", (req,res)=>{
 		
 							movieList.appendChild(movieCard);
 						});
+					});
+				}
+
+				//function to fetch TV Show data
+				
+				function fetchTVData() {
+					fetch('http://localhost:8080/tv/show', {
+						method: 'GET',
+						headers: {
+							'Accept': 'application/json',
+						},
+					})
+					.then(response => response.json())
+					.then(data => {
+
+						const tvList = document.getElementById('tv-list');
+						tvList.innerHTML = ''; // Clear previous data
+						
+						data.forEach(show => {
+							const movieCard = document.createElement('div');
+							movieCard.classList.add('movie-card');
+
+							movieCard.style.display = 'inline-block';
+							movieCard.style.marginRight = '30px';
+
+							const front = document.createElement('div');
+							front.classList.add('front');
+							const image = document.createElement('img');
+							image.src = show.image;
+							image.classList.add('movie-image');
+							front.appendChild(image);
+
+							const back = document.createElement('div');
+							back.classList.add('back');
+							back.innerHTML = \`
+								<p>Title: \${show.title}</p>
+								<p>Director: \${show.director}</p>
+								<p>Rating: \${show.rating}</p>
+								<p>Duration: \${show.duration} minutes</p>
+							\`;
+
+							movieCard.appendChild(front);
+							movieCard.appendChild(back);
+
+							movieCard.addEventListener('click', () => playVideo(movie.link));
+
+							movieCard.addEventListener('mouseenter', () => {
+								movieCard.classList.add('hover');
+							});
+
+							movieCard.addEventListener('mouseleave', () => {
+								movieCard.classList.remove('hover');
+							});
+
+							tvList.appendChild(movieCard);
+						});
+
+					});
 				}
 
 				// Function to play video
@@ -624,57 +694,99 @@ router.get("/home", (req,res)=>{
 					videoPlayer.load();
 					videoPlayer.play();
 				}
+				
 			
 				////////////////////////////////////////////////
 
 
-				// const movieList = document.getElementById('movie-list');
-				// movieList.innerHTML = ''; // Clear previous data
-				// movieList.classList.add('movie-grid'); // Apply grid layout to the movie list
+				const movieList = document.getElementById('movie-list');
+				movieList.innerHTML = ''; // Clear previous data
 
-				// // Loop through movieData to create movie cards
-				// movieData.forEach(movie => {
-				// 	const movieCard = document.createElement('div');
-				// 	movieCard.classList.add('movie-card');
+				movieData.forEach(movie => {
+					const movieCard = document.createElement('div');
+					movieCard.classList.add('movie-card');
 
-				// 	movieCard.style.display = 'inline-block';
-				// 	movieCard.style.marginRight = '30px';
+					movieCard.style.display = 'inline-block';
+					movieCard.style.marginRight = '30px';
 
-				// 	const front = document.createElement('div');
-				// 	front.classList.add('front');
-				// 	const image = document.createElement('img');
-				// 	image.src = movie.image;
-				// 	image.classList.add('movie-image');
-				// 	front.appendChild(image);
+					const front = document.createElement('div');
+					front.classList.add('front');
+					const image = document.createElement('img');
+					image.src = movie.image;
+					image.classList.add('movie-image');
+					front.appendChild(image);
 
-				// 	const back = document.createElement('div');
-				// 	back.classList.add('back');
-				// 	back.innerHTML = \`
-				// 		<p>Title: \${movie.title}</p>
-				// 		<p>Director: \${movie.director}</p>
-				// 		<p>Rating: \${movie.rating}</p>
-				// 		<p>Duration: \${movie.duration} minutes</p>
-				// 	\`;
+					const back = document.createElement('div');
+					back.classList.add('back');
+					back.innerHTML = \`
+						<p>Title: \${movie.title}</p>
+						<p>Director: \${movie.director}</p>
+						<p>Rating: \${movie.rating}</p>
+						<p>Duration: \${movie.duration} minutes</p>
+					\`;
 
-				// 	movieCard.appendChild(front);
-				// 	movieCard.appendChild(back);
+					movieCard.appendChild(front);
+					movieCard.appendChild(back);
 
-				// 	movieCard.addEventListener('click', () => playVideo(movie.link));
+					movieCard.addEventListener('click', () => playVideo(movie.link));
 
-				// 	movieCard.addEventListener('mouseenter', () => {
-				// 		movieCard.classList.add('hover');
-				// 	});
+					movieCard.addEventListener('mouseenter', () => {
+						movieCard.classList.add('hover');
+					});
 
-				// 	movieCard.addEventListener('mouseleave', () => {
-				// 		movieCard.classList.remove('hover');
-				// 	});
+					movieCard.addEventListener('mouseleave', () => {
+						movieCard.classList.remove('hover');
+					});
 
-				// 	movieList.appendChild(movieCard);
-				// });
+					movieList.appendChild(movieCard);
+				});
+
+				const tvList = document.getElementById('tv-list');
+				tvList.innerHTML = ''; // Clear previous data
+				
+				movieData.forEach(show => {
+					const movieCard = document.createElement('div');
+					movieCard.classList.add('movie-card');
+
+					movieCard.style.display = 'inline-block';
+					movieCard.style.marginRight = '30px';
+
+					const front = document.createElement('div');
+					front.classList.add('front');
+					const image = document.createElement('img');
+					image.src = show.image;
+					image.classList.add('movie-image');
+					front.appendChild(image);
+
+					const back = document.createElement('div');
+					back.classList.add('back');
+					back.innerHTML = \`
+						<p>Title: \${show.title}</p>
+						<p>Director: \${show.director}</p>
+						<p>Rating: \${show.rating}</p>
+						<p>Duration: \${show.duration} minutes</p>
+					\`;
+
+					movieCard.appendChild(front);
+					movieCard.appendChild(back);
+
+					movieCard.addEventListener('click', () => playVideo(movie.link));
+
+					movieCard.addEventListener('mouseenter', () => {
+						movieCard.classList.add('hover');
+					});
+
+					movieCard.addEventListener('mouseleave', () => {
+						movieCard.classList.remove('hover');
+					});
+
+					tvList.appendChild(movieCard);
+				});
 				
 				////////////////////////////////////////////////////
 
-				fetchMovieData();
+				//fetchMovieData();
+				//fetchTVData();
 
 			</script>
 		</body>
