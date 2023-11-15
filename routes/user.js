@@ -321,7 +321,7 @@ router.get("/home", (req,res)=>{
 			.movie-card.hover .back {
 				transform: rotateY(0deg);
 			}
-			
+
 			.movie-image {
 				width: 200px;
 				height: 200px;
@@ -559,7 +559,7 @@ router.get("/home", (req,res)=>{
 							const front = document.createElement('div');
 							front.classList.add('front');
 							const image = document.createElement('img');
-							image.src = movie.image;
+							image.src = movie.picture_link;
 							image.classList.add('movie-image');
 							front.appendChild(image);
 		
@@ -575,7 +575,7 @@ router.get("/home", (req,res)=>{
 							movieCard.appendChild(front);
 							movieCard.appendChild(back);
 		
-							movieCard.addEventListener('click', () => playVideo(movie.link));
+							movieCard.addEventListener('click', () => playVideo(movie.video_link));
 		
 							movieCard.addEventListener('mouseenter', () => {
 								movieCard.classList.add('hover');
@@ -584,7 +584,7 @@ router.get("/home", (req,res)=>{
 							movieCard.addEventListener('mouseleave', () => {
 								movieCard.classList.remove('hover');
 							});
-							if(index < 2){
+							if(index < 3){
 								movieList.appendChild(movieCard);
 							}else{
 								tvList.appendChild(movieCard);
@@ -662,59 +662,59 @@ router.get("/home", (req,res)=>{
 				////////////////////////////////////////////////
 
 
-				const movieList = document.getElementById('movie-list');
-				movieList.innerHTML = ''; // Clear previous data
-				const tvList = document.getElementById('tv-list');
-				tvList.innerHTML = ''; // Clear previous data
+				// const movieList = document.getElementById('movie-list');
+				// movieList.innerHTML = ''; // Clear previous data
+				// const tvList = document.getElementById('tv-list');
+				// tvList.innerHTML = ''; // Clear previous data
 
-				movieData.forEach((movie,index) => {
+				// movieData.forEach((movie,index) => {
 
-					const movieCard = document.createElement('div');
-					movieCard.classList.add('movie-card');
+				// 	const movieCard = document.createElement('div');
+				// 	movieCard.classList.add('movie-card');
 
-					movieCard.style.display = 'inline-block';
-					movieCard.style.marginRight = '30px';
+				// 	movieCard.style.display = 'inline-block';
+				// 	movieCard.style.marginRight = '30px';
 
-					const front = document.createElement('div');
-					front.classList.add('front');
-					const image = document.createElement('img');
-					image.src = movie.image;
-					image.classList.add('movie-image');
-					front.appendChild(image);
+				// 	const front = document.createElement('div');
+				// 	front.classList.add('front');
+				// 	const image = document.createElement('img');
+				// 	image.src = movie.image;
+				// 	image.classList.add('movie-image');
+				// 	front.appendChild(image);
 
-					const back = document.createElement('div');
-					back.classList.add('back');
-					back.innerHTML =\`
-						<p>Title: \${movie.title}</p>
-						<p>Director: \${movie.director}</p>
-						<p>Rating: \${movie.rating}</p>
-						<p>Duration: \${movie.duration} minutes</p>
-					\`;
+				// 	const back = document.createElement('div');
+				// 	back.classList.add('back');
+				// 	back.innerHTML =\`
+				// 		<p>Title: \${movie.title}</p>
+				// 		<p>Director: \${movie.director}</p>
+				// 		<p>Rating: \${movie.rating}</p>
+				// 		<p>Duration: \${movie.duration} minutes</p>
+				// 	\`;
 
-					movieCard.appendChild(front);
-					movieCard.appendChild(back);
+				// 	movieCard.appendChild(front);
+				// 	movieCard.appendChild(back);
 
-					movieCard.addEventListener('click', () => playVideo(movie.link));
+				// 	movieCard.addEventListener('click', () => playVideo(movie.link));
 
-					movieCard.addEventListener('mouseenter', () => {
-						movieCard.classList.add('hover');
-					});
+				// 	movieCard.addEventListener('mouseenter', () => {
+				// 		movieCard.classList.add('hover');
+				// 	});
 
-					movieCard.addEventListener('mouseleave', () => {
-						movieCard.classList.remove('hover');
-					});
-					if(index < 1){
-						movieList.appendChild(movieCard);
-					}else{
-						tvList.appendChild(movieCard);
-					}
+				// 	movieCard.addEventListener('mouseleave', () => {
+				// 		movieCard.classList.remove('hover');
+				// 	});
+				// 	if(index < 1){
+				// 		movieList.appendChild(movieCard);
+				// 	}else{
+				// 		tvList.appendChild(movieCard);
+				// 	}
 					
-				});
+				// });
 
 				
 				////////////////////////////////////////////////////
 
-				//fetchAllData();
+				fetchAllData();
 
 			</script>
 		</body>
@@ -889,11 +889,11 @@ router.get("/admin", (req,res)=>{
 			.modal {
 				display: none;
 				position: fixed;
-				top: 0;
-				left: 0;
+				top: 200;
+				left: 200;
 				width: 100%;
 				height: 100%;
-				background-color: rgba(0,0,0,0.5);
+				background-color: rgba(244,244,244,0.6);
 				justify-content: center;
 				align-items: center;
 			}
@@ -904,6 +904,9 @@ router.get("/admin", (req,res)=>{
 				border-radius: 8px;
 				box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 				text-align: left;
+				top: 100rem;
+				left: 300rem;
+				background-color: rgba(244, 244, 244, 0.6);
 			}
 	
 			.close {
@@ -929,15 +932,20 @@ router.get("/admin", (req,res)=>{
 				margin-left: 10px;
 				transition: background-color 0.3s ease, color 0.3s ease;
 			}
-	
+			
+			.text-boxes{
+				background-color: rgba(244, 244, 244, 0.1);
+			}
+
 			.remove-movie-button:hover {
 				background-color: #ff3e26;
 			}
 			#addMovieForm {
 				position: absolute;
-				top: 150%; /* Adjust this value to move the form down */
+				top: 500%; /* Adjust this value to move the form down */
 				left: 50%;
 				transform: translate(-50%, -50%);
+				
 				/* Add more styling as needed */
 			}
 			
@@ -960,21 +968,26 @@ router.get("/admin", (req,res)=>{
 			<div id="addMovieForm" class="modal">
 				<div class="modal-content">
 					<span class="close" onclick="closeModal('addMovieForm')">&times;</span>
-					<h2 style="text-align: center; margin-bottom: 20px;">Add Movie</h2>
+					<h2 style="text-align: center;
+						margin-bottom: 20px;
+						">Add Movie
+					</h2>
+					<div class = "text-boxes">
 					<label for="title">Title:</label>
-					<input type="text" id="title" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<input type="text" id="title" required style="width: 100%; padding: 8px; margin-bottom: 10px; background-color: #d1d1d1;">
 					<label for="director">Director:</label>
-					<input type="text" id="director" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<input type="text" id="director" required style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
 					<label for="rating">Rating:</label>
-					<input type="number" id="rating" required step="any" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<input type="number" id="rating" required step="any" style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
 					<label for="summary">Summary:</label>
-					<input type="text" id="summary" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<input type="text" id="summary" required style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
 					<label for="duration">Duration:</label>
-					<input type="number" id="duration" required step="any" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<input type="number" id="duration" required step="any" style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
 					<label for="videoLink">Video Link:</label>
-					<input type="text" id="videoLink" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<input type="text" id="videoLink" required style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
 					<label for="videoLink">Picture Link:</label>
 					<input type="text" id="pictureLink" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					</div>
 					<button class="button add-movie-button" onclick="addMovie()">Submit</button>
 					<button class="button cancel-button" onclick="closeModal('addMovieForm')">Cancel</button>
 				</div>
