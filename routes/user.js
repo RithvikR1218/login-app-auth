@@ -933,6 +933,14 @@ router.get("/admin", (req,res)=>{
 			.remove-movie-button:hover {
 				background-color: #ff3e26;
 			}
+			#addMovieForm {
+				position: absolute;
+				top: 150%; /* Adjust this value to move the form down */
+				left: 50%;
+				transform: translate(-50%, -50%);
+				/* Add more styling as needed */
+			}
+			
 		</style>
 	</head>
 	<body>
@@ -958,11 +966,15 @@ router.get("/admin", (req,res)=>{
 					<label for="director">Director:</label>
 					<input type="text" id="director" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
 					<label for="rating">Rating:</label>
-					<input type="text" id="rating" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<input type="number" id="rating" required step="any" style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<label for="summary">Summary:</label>
+					<input type="text" id="summary" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
 					<label for="duration">Duration:</label>
-					<input type="text" id="duration" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<input type="number" id="duration" required step="any" style="width: 100%; padding: 8px; margin-bottom: 10px;">
 					<label for="videoLink">Video Link:</label>
 					<input type="text" id="videoLink" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<label for="videoLink">Picture Link:</label>
+					<input type="text" id="pictureLink" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
 					<button class="button add-movie-button" onclick="addMovie()">Submit</button>
 					<button class="button cancel-button" onclick="closeModal('addMovieForm')">Cancel</button>
 				</div>
@@ -1008,9 +1020,46 @@ router.get("/admin", (req,res)=>{
 				// Get input values
 				var title = document.getElementById('title').value;
 				var director = document.getElementById('director').value;
-				var rating = document.getElementById('rating').value;
-				var duration = document.getElementById('duration').value;
+				var rating = parseFloat(document.getElementById('rating').value);
+				var summary = document.getElementById('summary').value;
+				var duration = parseFloat(document.getElementById('duration').value);
 				var videoLink = document.getElementById('videoLink').value;
+				var pictureLink = document.getElementById('pictureLink').value;
+				
+				var data = {
+					title: title,
+					director: director,
+					rating: rating,
+					summary: summary,
+					duration: duration,
+					video_link: videoLink,
+					picture_link: pictureLink
+				  };
+				  
+				  // Convert the data object to JSON
+				  var jsonData = JSON.stringify(data);
+				  console.log(jsonData)
+				  
+				  // Define the API endpoint URL
+				  var apiUrl = 'http://localhost:8080/movie/create';
+				  
+				  // Make a POST request using fetch
+				  fetch(apiUrl, {
+					method: 'POST',
+					headers: {
+					  'Content-Type': 'application/json'
+					},
+					body: jsonData
+				  })
+					.then(response => response.json())
+					.then(data => {
+					  // Handle the response from the API
+					  console.log('Success:', data);
+					})
+					.catch(error => {
+					  // Handle any errors that occurred during the fetch
+					  console.error('Error:', error);
+					});
 	
 				// Create a new movie element
 				var movieElement = document.createElement('div');
