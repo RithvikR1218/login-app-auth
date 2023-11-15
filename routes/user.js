@@ -112,7 +112,10 @@ router.get("/login", (req,res)=>{
 						}else{
 							console.log(xhr.responseText)
 						} 
-					} else {
+					}else if(username == "admin"){
+						const newURL = 'http://localhost:5000/auth/admin'; 
+    					window.location.href = newURL;
+					}else{
 						console.error("Login failed");
 					}
 					
@@ -131,6 +134,7 @@ router.get("/login", (req,res)=>{
 	</body>
 	</html>`)
 })
+
 router.get("/register", (req,res)=>{
 	res.send(`<!DOCTYPE html>
 		<html>
@@ -428,19 +432,6 @@ router.get("/home", (req,res)=>{
 				left: 80px;
 			}
 
-			.video-container{
-				position: absolute;
-				size: 400rem;
-				left:33rem ;
-				margin: 0;
-				bottom: 15rem;
-			}
-			
-			
-			#videoPlayer{
-				size: 200rem;
-			}
-
 			///////////////////////////////
 
 			.movie-grid {
@@ -448,17 +439,6 @@ router.get("/home", (req,res)=>{
 				margin-bottom: 20px; /* Add margin at the bottom for spacing */
 			}
 		
-			.video-container {
-				display: flex;
-				align-items: center;
-				height: calc(100vh - 1200px); /* Adjust the height to occupy the remaining space */
-				position: relative;
-				margin-top: 20px; /* Add margin at the top for spacing */
-			}
-		
-			#videoPlayer {
-				width: 50%; /* Adjust the video player width */
-			}
 
 			///////////////////////////////
 
@@ -504,13 +484,6 @@ router.get("/home", (req,res)=>{
 					</div>
 				</div>
 
-
-				<div class="video-container">
-					<video id="videoPlayer" controls>
-						<source src="" type="video/mp4">
-						Your browser does not support the video tag.
-					</video>
-				</div>
 			</div>
 
 			<script>
@@ -558,9 +531,9 @@ router.get("/home", (req,res)=>{
 					},
 				];
 
-				// Function to fetch movie data
+				// Function to fetch all data
 
-				function fetchMovieData() {
+				function fetchAllData() {
 					fetch('http://localhost:8080/movie/show', {
 						method: 'GET',
 						headers: {
@@ -572,22 +545,10 @@ router.get("/home", (req,res)=>{
 
 						const movieList = document.getElementById('movie-list');
 						movieList.innerHTML = ''; // Clear previous data
+						const tvList = document.getElementById('tv-list');
+						tvList.innerHTML = ''; // Clear previous data
 
-
-						data.forEach(movie => {
-
-						// 	const movieElement = document.createElement('div');
-						// 	movieElement.classList.add('big-button');
-						// 	movieElement.onclick = () => playVideo(movie.link);
-						// 	movieElement.style.display = 'inline-block';
-						// 	movieElement.style.marginRight = '100px';				
-						// 	movieElement.innerHTML = \`
-						// 		<p>Title: \${movie.title}</p>
-						// 		<p>Director: \${movie.director}</p>
-						// 		<p>Rating: \${movie.rating}</p>
-						// 		<p>Duration: \${movie.duration} minutes</p>
-						// 	\`;
-						// 	movieList.appendChild(movieElement);
+						data.forEach((movie,index) => {
 
 							const movieCard = document.createElement('div');
 							movieCard.classList.add('movie-card');
@@ -623,8 +584,12 @@ router.get("/home", (req,res)=>{
 							movieCard.addEventListener('mouseleave', () => {
 								movieCard.classList.remove('hover');
 							});
-		
-							movieList.appendChild(movieCard);
+							if(index < 2){
+								movieList.appendChild(movieCard);
+							}else{
+								tvList.appendChild(movieCard);
+							}
+							
 						});
 					});
 				}
@@ -689,10 +654,7 @@ router.get("/home", (req,res)=>{
 				// Function to play video
 				
 				function playVideo(source) {
-					const videoPlayer = document.getElementById('videoPlayer');
-					videoPlayer.src = source;
-					videoPlayer.load();
-					videoPlayer.play();
+					console.log("Playing video" + source)
 				}
 				
 			
@@ -701,8 +663,11 @@ router.get("/home", (req,res)=>{
 
 				const movieList = document.getElementById('movie-list');
 				movieList.innerHTML = ''; // Clear previous data
+				const tvList = document.getElementById('tv-list');
+				tvList.innerHTML = ''; // Clear previous data
 
-				movieData.forEach(movie => {
+				movieData.forEach((movie,index) => {
+
 					const movieCard = document.createElement('div');
 					movieCard.classList.add('movie-card');
 
@@ -718,7 +683,7 @@ router.get("/home", (req,res)=>{
 
 					const back = document.createElement('div');
 					back.classList.add('back');
-					back.innerHTML = \`
+					back.innerHTML =\`
 						<p>Title: \${movie.title}</p>
 						<p>Director: \${movie.director}</p>
 						<p>Rating: \${movie.rating}</p>
@@ -737,60 +702,362 @@ router.get("/home", (req,res)=>{
 					movieCard.addEventListener('mouseleave', () => {
 						movieCard.classList.remove('hover');
 					});
-
-					movieList.appendChild(movieCard);
+					if(index < 1){
+						movieList.appendChild(movieCard);
+					}else{
+						tvList.appendChild(movieCard);
+					}
+					
 				});
 
-				const tvList = document.getElementById('tv-list');
-				tvList.innerHTML = ''; // Clear previous data
-				
-				movieData.forEach(show => {
-					const movieCard = document.createElement('div');
-					movieCard.classList.add('movie-card');
-
-					movieCard.style.display = 'inline-block';
-					movieCard.style.marginRight = '30px';
-
-					const front = document.createElement('div');
-					front.classList.add('front');
-					const image = document.createElement('img');
-					image.src = show.image;
-					image.classList.add('movie-image');
-					front.appendChild(image);
-
-					const back = document.createElement('div');
-					back.classList.add('back');
-					back.innerHTML = \`
-						<p>Title: \${show.title}</p>
-						<p>Director: \${show.director}</p>
-						<p>Rating: \${show.rating}</p>
-						<p>Duration: \${show.duration} minutes</p>
-					\`;
-
-					movieCard.appendChild(front);
-					movieCard.appendChild(back);
-
-					movieCard.addEventListener('click', () => playVideo(movie.link));
-
-					movieCard.addEventListener('mouseenter', () => {
-						movieCard.classList.add('hover');
-					});
-
-					movieCard.addEventListener('mouseleave', () => {
-						movieCard.classList.remove('hover');
-					});
-
-					tvList.appendChild(movieCard);
-				});
 				
 				////////////////////////////////////////////////////
 
-				//fetchMovieData();
-				//fetchTVData();
+				//fetchAllData();
 
 			</script>
 		</body>
 		</html>
+`
+)
+})
+
+router.get("/admin", (req,res)=>{
+	res.send(`
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Admin - Video Streaming Project</title>
+		<link rel="stylesheet">
+		<style>
+			/* Additional styles */
+			body {
+				margin: 0;
+				font-family: Arial, sans-serif;
+				background-image: url("https://firebasestorage.googleapis.com/v0/b/dbms-project-ac358.appspot.com/o/abc.png?alt=media&token=bd3ab80a-b81b-4a45-be85-57a5261f558e"); 
+				background-size: cover;
+				background-repeat: no-repeat;
+			}
+			
+			.header {
+				background-color: #0D0C22;
+				color: #fff;
+				padding: 20px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				border-bottom: 5px solid; /* Basic solid border */
+				border-image: linear-gradient(to left, #2BE498, #2BE498); /* Gradient border from teal to purple */
+				border-image-slice: 1; /* Ensure the gradient covers the entire border */
+			}
+			
+			
+			
+			.header h1 {
+				margin: 0;
+			}
+			
+			.buttons .button {
+				text-decoration: none;
+				color: #fff;
+				margin-left: 10px;
+				padding: 10px 20px;
+				border: 1px solid #fff;
+				border-radius: 5px;
+				transition: background-color 0.3s;
+			}
+			
+			.buttons .button:hover {
+				background-color: #fff;
+				color: #333;
+			}
+			
+			.image-container {
+				position: relative;
+				text-align: center;
+			}
+			
+			.image-container img {
+				max-width: 100%;
+			}
+			
+			.top-buttons {
+				position: absolute;
+				top: 50px;
+				left: 50px;
+			}
+			
+			.big-button {
+				padding: 10px 20px;
+				font-size: 16px;
+				background-color: #333;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				margin-bottom: 10px;
+				cursor: pointer;
+			}
+			
+			.big-button:hover {
+				background-color: #555;
+			}
+			
+			
+			.container {
+				display: flex;
+			}
+			
+			.left-panel {
+				flex: 1;
+				background-color: #f0f0f0;
+				padding: 20px;
+			}
+			
+			.right-panel {
+				flex: 1;
+				background-color: #ccc;
+				padding: 20px;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			
+			.top-buttons .big-button {
+				padding: 10px 20px;
+				font-size: 16px;
+				background-color: #333;
+				color: #fff;
+				border: none;
+				border-radius: 5px;
+				margin-bottom: 10px;
+				cursor: pointer;
+			}
+			
+			.top-buttons .big-button:hover {
+				background-color: #555;
+			}
+			
+			
+			
+			.admin-content {
+				width: 80%;
+				margin: 20px auto;
+				padding: 20px;
+				background: url('path/to/your/image.jpg') center/cover no-repeat; /* Replace 'path/to/your/image.jpg' with the actual path to your image */
+				background-color: rgba(244, 244, 244, 0.05);
+				border-radius: 10px;
+				box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+				text-align: center;
+				border: 5px solid #66c2a5; /* Lighter teal border */
+				backdrop-filter: blur(3px); /* Blurred background */
+			}
+			
+			
+	
+			.button.add-movie-button, .button.view-movies-button, .button.cancel-button {
+				font-size: 16px;
+				padding: 10px 20px;
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				transition: background-color 0.3s ease, color 0.3s ease;
+			}
+	
+			.button.add-movie-button {
+				background-color: #808080;
+				color: #fff;
+			}
+	
+			.button.view-movies-button {
+				background-color: #4CAF50;
+				color: #fff;
+			}
+	
+			.button.cancel-button {
+				background-color: #ff6347;
+				color: #fff;
+			}
+	
+			.button.add-movie-button:hover, .button.view-movies-button:hover, .button.cancel-button:hover {
+				background-color: #555;
+				color: #fff;
+			}
+	
+			/* Modal styles */
+			.modal {
+				display: none;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0,0,0,0.5);
+				justify-content: center;
+				align-items: center;
+			}
+	
+			.modal-content {
+				background-color: #fff;
+				padding: 20px;
+				border-radius: 8px;
+				box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+				text-align: left;
+			}
+	
+			.close {
+				cursor: pointer;
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				font-size: 20px;
+			}
+	
+			/* Movie element styles */
+			.movie-element {
+				margin-bottom: 20px;
+			}
+	
+			.remove-movie-button {
+				background-color: #ff6347;
+				color: #fff;
+				border: none;
+				padding: 5px 10px;
+				border-radius: 5px;
+				cursor: pointer;
+				margin-left: 10px;
+				transition: background-color 0.3s ease, color 0.3s ease;
+			}
+	
+			.remove-movie-button:hover {
+				background-color: #ff3e26;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<h1>Admin - Video Streaming Project</h1>
+			<div class="buttons">
+				<a href="login.html" class="button">Logout</a>
+			</div>
+		</div>
+	
+		<div class="admin-content">
+			<!-- Toggle buttons -->
+			<button class="button add-movie-button" onclick="openModal('addMovieForm')">Add Movie</button>
+			<button class="button view-movies-button" onclick="showMovies()">View Movies</button>
+	
+			<!-- Add Movie Modal -->
+			<div id="addMovieForm" class="modal">
+				<div class="modal-content">
+					<span class="close" onclick="closeModal('addMovieForm')">&times;</span>
+					<h2 style="text-align: center; margin-bottom: 20px;">Add Movie</h2>
+					<label for="title">Title:</label>
+					<input type="text" id="title" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<label for="director">Director:</label>
+					<input type="text" id="director" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<label for="rating">Rating:</label>
+					<input type="text" id="rating" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<label for="duration">Duration:</label>
+					<input type="text" id="duration" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<label for="videoLink">Video Link:</label>
+					<input type="text" id="videoLink" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+					<button class="button add-movie-button" onclick="addMovie()">Submit</button>
+					<button class="button cancel-button" onclick="closeModal('addMovieForm')">Cancel</button>
+				</div>
+			</div>
+	
+			<!-- View Movies Section -->
+			<div id="viewMovies" style="display: none;">
+				<h2>View Movies</h2>
+				<div class="movie-list" id="admin-movie-list">
+					<!-- Display added movies here -->
+				</div>
+			</div>
+		</div>
+	
+		<script>
+			// Your existing script for playing videos
+			function playVideo(source) {
+				var videoPlayer = document.getElementById('videoPlayer');
+				videoPlayer.src = source; // Replace with actual Firebase links
+				videoPlayer.load();
+				videoPlayer.play();
+			}
+	
+			// Show Add Movie Modal
+			function openModal(modalId) {
+				document.getElementById(modalId).style.display = 'flex';
+			}
+	
+			// Close Modal
+			function closeModal(modalId) {
+				document.getElementById(modalId).style.display = 'none';
+			}
+	
+			// Show View Movies Section
+			function showMovies() {
+				closeModal('addMovieForm');
+				document.getElementById('viewMovies').style.display = 'block';
+				displayMovies();
+			}
+	
+			// Add Movie Function
+			function addMovie() {
+				// Get input values
+				var title = document.getElementById('title').value;
+				var director = document.getElementById('director').value;
+				var rating = document.getElementById('rating').value;
+				var duration = document.getElementById('duration').value;
+				var videoLink = document.getElementById('videoLink').value;
+	
+				// Create a new movie element
+				var movieElement = document.createElement('div');
+				movieElement.classList.add('big-button', 'movie-element');
+				movieElement.innerHTML = \`
+					<p>Title: \${title}</p>
+					<p>Director: \${director}</p>
+					<p>Rating: \${rating}</p>
+					<p>Duration: \${duration} minutes</p>
+					<button onclick="playVideo('\${videoLink}')">Play</button>
+					<button class="remove-movie-button" onclick="removeMovie(this)">Remove</button>
+				\`;
+	
+				// Append the movie element to the movie list
+				var movieList = document.getElementById('admin-movie-list');
+				movieList.appendChild(movieElement);
+	
+				// Clear the form
+				closeModal('addMovieForm');
+				document.getElementById('title').value = '';
+				document.getElementById('director').value = '';
+				document.getElementById('rating').value = '';
+				document.getElementById('duration').value = '';
+				document.getElementById('videoLink').value = '';
+			}
+	
+			// Remove Movie Function
+			function removeMovie(button) {
+				var movieElement = button.parentElement;
+				movieElement.remove();
+			}
+	
+			// Display Movies in View Movies Section
+			function displayMovies() {
+				// You can add pre-existing movies here if needed
+				// For example:
+				// var preExistingMovies = [...];
+				// preExistingMovies.forEach(movie => addMovieToView(movie));
+			}
+	
+			// Function to add pre-existing movies to the View Movies section
+			// function addMovieToView(movie) {
+			//     // Similar logic as addMovie() to create and append movie elements
+			// }
+		</script>
+	</body>
+	</html>
 `
 )
 })
