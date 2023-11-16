@@ -1,6 +1,8 @@
 const express = require("express")
 const mongoose = require("mongoose") // new
 const routes = require("./routes/user") // new
+const loginRoutes = require("./routes/login") // new
+const videoRoutes = require("./routes/video") // new
 
 var cors = require('cors')
 var app = express()
@@ -20,6 +22,8 @@ mongoose
 		const app = express()
         app.use(express.json()) // new
         app.use("/auth",routes);
+        app.use("/auth",loginRoutes);
+        app.use("/auth",videoRoutes);
 		app.listen(5000, () => {
 			console.log("Server has started!")
 		})
