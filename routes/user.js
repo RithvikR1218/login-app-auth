@@ -2,6 +2,7 @@ const express = require("express")
 const User = require("../db/User") // new
 const router = express.Router()
 const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt")
 var crypto = require('crypto'); 
 
 // Get all posts
@@ -101,7 +102,6 @@ router.get("/login", (req,res)=>{
 				// Set the request headers
 				xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
 				xhr.onload = function () {
-					console.log(username)
 					if (xhr.status === 200) {
 						var response = JSON.parse(xhr.responseText)
 						if(response.token){
@@ -111,12 +111,13 @@ router.get("/login", (req,res)=>{
     						window.location.href = newURL;
 						}else{
 							console.log(xhr.responseText)
+							alert(xhr.responseText)
 						} 
 					}else if(username == "admin"){
 						const newURL = 'http://localhost:5000/auth/admin'; 
     					window.location.href = newURL;
 					}else{
-						console.error("Login failed");
+						alert("Login failed")
 					}
 					
 				};
@@ -1003,14 +1004,6 @@ router.get("/admin", (req,res)=>{
 		</div>
 	
 		<script>
-			// Your existing script for playing videos
-			function playVideo(source) {
-				var videoPlayer = document.getElementById('videoPlayer');
-				videoPlayer.src = source; // Replace with actual Firebase links
-				videoPlayer.load();
-				videoPlayer.play();
-			}
-	
 			// Show Add Movie Modal
 			function openModal(modalId) {
 				document.getElementById(modalId).style.display = 'flex';
@@ -1051,7 +1044,6 @@ router.get("/admin", (req,res)=>{
 				  
 				  // Convert the data object to JSON
 				  var jsonData = JSON.stringify(data);
-				  console.log(jsonData)
 				  
 				  // Define the API endpoint URL
 				  var apiUrl = 'http://localhost:8080/movie/create';
@@ -1071,7 +1063,7 @@ router.get("/admin", (req,res)=>{
 					})
 					.catch(error => {
 					  // Handle any errors that occurred during the fetch
-					  console.error('Error:', error);
+					  alert('Error:', error)
 					});
 	
 				// Create a new movie element
@@ -1082,7 +1074,6 @@ router.get("/admin", (req,res)=>{
 					<p>Director: \${director}</p>
 					<p>Rating: \${rating}</p>
 					<p>Duration: \${duration} minutes</p>
-					<button onclick="playVideo('\${videoLink}')">Play</button>
 					<button class="remove-movie-button" onclick="removeMovie(this)">Remove</button>
 				\`;
 	
@@ -1102,7 +1093,28 @@ router.get("/admin", (req,res)=>{
 			// Remove Movie Function
 			function removeMovie(button) {
 				var movieElement = button.parentElement;
+				var titleElement = movieElement.querySelector('p:first-child');
+				var title = titleElement.textContent.replace('Title: ', ''); // Remove the "Title: " prefix if needed
+				var apiUrl = 'http://localhost:8080/movie/delete';
+				apiUrl = apiUrl + '/' + encodeURIComponent(title);
 				movieElement.remove();
+				
+				// Make a POST request using fetch
+				fetch(apiUrl, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				})
+				.then(response => response.json())
+				.then(data => {
+					// Handle the response from the API
+					console.log('Success:', data);
+				})
+				.catch(error => {
+					// Handle any errors that occurred during the fetch
+					alert('Error:', error)
+				});
 			}
 	
 			// Display Movies in View Movies Section
@@ -1311,14 +1323,15 @@ router.get("/videoplayer", (req,res)=>{
 })
 
 router.post("/login", async (req, res) => {
-	console.log(req.body)
 	const users = await User.findOne({username: req.body.username})
 
     if (!users) {
         return res.status(404).json({ error: "User not found" });
     }
 
-    if (req.body.password !== users.password) {
+	const passwordMatch = await bcrypt.compare(req.body.password, users.password);
+
+    if (!passwordMatch) {
         return res.status(401).json({ error: "Incorrect password" });
     }
 
@@ -1327,12 +1340,16 @@ router.post("/login", async (req, res) => {
 })
 
 router.post("/register", async (req, res) => {
-	const user = new User({
-		username: req.body.username,
-		password: req.body.password,
-	})
-	await user.save()
-	res.send(user)
+	const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+    const user = new User({
+        username: req.body.username,
+        password: hashedPassword,
+    });
+
+    await user.save();
+    res.send(user);
+
 })
 
 module.exports = router
