@@ -77,10 +77,10 @@
                     const back = document.createElement('div');
                     back.classList.add('back');
                     back.innerHTML =`
-                        <p>Title: ${movie.title}</p>
-                        <p>Director: ${movie.director}</p>
-                        <p>Rating: ${movie.rating}</p>
-                        <p>Duration: ${movie.duration} minutes</p>
+                        <span>${movie.title}</span>
+                        <p>Directed by ${movie.director}</p>
+                        <p>Rated ${movie.rating}/10</p>
+                        <p>${movie.duration} minutes</p>
                     `;
 
                     movieCard.appendChild(front);
@@ -97,7 +97,7 @@
                     });
                     if(index < 3){
                         movieList.appendChild(movieCard);
-                    }else{
+                    } else{
                         tvList.appendChild(movieCard);
                     }
                     
@@ -136,10 +136,10 @@
                     const back = document.createElement('div');
                     back.classList.add('back');
                     back.innerHTML = `
-                        <p>Title: \${show.title}</p>
-                        <p>Director: \${show.director}</p>
-                        <p>Rating: \${show.rating}</p>
-                        <p>Duration: \${show.duration} minutes</p>
+                        <span>\${show.title}</span>
+                        <p>Directed by \${show.director}</p>
+                        <p>Rated \${show.rating}/10</p>
+                        <p>\${show.duration} minutes</p>
                     `;
 
                     movieCard.appendChild(front);
