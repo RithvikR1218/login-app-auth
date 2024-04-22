@@ -5,13 +5,14 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt")
 const path = require('path');
 
-router.get("/home", (req,res)=>{
-	res.sendFile(path.join(__dirname, '/html/home.html'));
-})
+router.get("/home", (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/html/home.html'));
+});
 
-router.get("/admin", (req,res)=>{
-	res.sendFile(path.join(__dirname, '/html/admin.html'));
-})
+router.get("/admin", (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/html/admin.html'));
+});
+
 
 router.post("/login", async (req, res) => {
 	const users = await User.findOne({username: req.body.username})
@@ -37,10 +38,8 @@ router.post("/register", async (req, res) => {
         username: req.body.username,
         password: hashedPassword,
     });
-
     await user.save();
     res.send(user);
-
 })
 
 module.exports = router

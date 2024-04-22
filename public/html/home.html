@@ -1,0 +1,52 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Streaming Project</title>
+    <script src="/js/home.js" defer></script>
+    <link rel="stylesheet" href="/css/home.css">
+</head>
+
+
+<body>
+    <div 
+    class="header" 
+    style = "background-color: #0D0C22;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left:20px;
+    padding-right:20px;
+    ">
+        <h1 style ="color: #0D0C22">Video Streaming Project</h1>
+        <div class="buttons">
+            <a href='http://localhost:5000/auth/login' class="button">Login</a>
+            <a href='http://localhost:5000/auth/register' class="button">Register</a>
+        </div>
+    </div>
+
+    <div class="image-container">
+
+        <img src="https://firebasestorage.googleapis.com/v0/b/dbms-project-ac358.appspot.com/o/abc.png?alt=media&token=bd3ab80a-b81b-4a45-be85-57a5261f558e" 
+        alt="Video Streaming Background">
+        
+        <div>
+            <h1 class="head-one" style="color: #fff">Movies</h1>
+            <div class="top-buttone movie-grid" id="movie-list">
+                <!-- Movie data -->
+            </div>
+        </div>
+
+        <div>
+            <h1 class="head-two" style="color: #fff">TV Shows</h1>
+            <div class="top-buttwo movie-grid" id="tv-list">
+                <!-- TV Show data -->
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

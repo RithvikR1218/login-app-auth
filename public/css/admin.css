@@ -1,0 +1,214 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-image: url("https://firebasestorage.googleapis.com/v0/b/dbms-project-ac358.appspot.com/o/abc.png?alt=media&token=bd3ab80a-b81b-4a45-be85-57a5261f558e"); 
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.header {
+    background-color: #0D0C22;
+    color: #fff;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 5px solid; /* Basic solid border */
+    border-image: linear-gradient(to left, #2BE498, #2BE498); /* Gradient border from teal to purple */
+    border-image-slice: 1; /* Ensure the gradient covers the entire border */
+}
+
+
+
+.header h1 {
+    margin: 0;
+}
+
+.buttons .button {
+    text-decoration: none;
+    color: #fff;
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.buttons .button:hover {
+    background-color: #fff;
+    color: #333;
+}
+
+.image-container {
+    position: relative;
+    text-align: center;
+}
+
+.image-container img {
+    max-width: 100%;
+}
+
+.top-buttons {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+}
+
+.big-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.big-button:hover {
+    background-color: #555;
+}
+
+
+.container {
+    display: flex;
+}
+
+.left-panel {
+    flex: 1;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.right-panel {
+    flex: 1;
+    background-color: #ccc;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.top-buttons .big-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.top-buttons .big-button:hover {
+    background-color: #555;
+}
+
+
+
+.admin-content {
+    width: 80%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: rgba(244, 244, 244, 0.05);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border: 5px solid #66c2a5; /* Lighter teal border */
+    backdrop-filter: blur(3px); /* Blurred background */
+}
+
+
+
+.button.add-movie-button, .button.view-movies-button, .button.cancel-button {
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button.add-movie-button {
+    background-color: #808080;
+    color: #fff;
+}
+
+.button.view-movies-button {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.button.cancel-button {
+    background-color: #ff6347;
+    color: #fff;
+}
+
+.button.add-movie-button:hover, .button.view-movies-button:hover, .button.cancel-button:hover {
+    background-color: #555;
+    color: #fff;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 200;
+    left: 200;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(244,244,244,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    top: 100rem;
+    left: 300rem;
+    background-color: rgba(244, 244, 244, 0.6);
+}
+
+.close {
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+}
+
+/* Movie element styles */
+.movie-element {
+    margin-bottom: 20px;
+}
+
+.remove-movie-button {
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.text-boxes{
+    background-color: rgba(244, 244, 244, 0.1);
+}
+
+.remove-movie-button:hover {
+    background-color: #ff3e26;
+}
+#addMovieForm {
+    position: absolute;
+    top: 500%; /* Adjust this value to move the form down */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    
+    /* Add more styling as needed */
+}

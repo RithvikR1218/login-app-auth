@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Video Streaming Project</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <script src="/js/admin.js" defer></script>
+</head>
+<body>
+    <div class="header">
+        <h1>Admin - Video Streaming Project</h1>
+        <div class="buttons">
+            <a href="http://localhost:5000/auth/login" class="button">Logout</a>
+        </div>
+    </div>
+
+    <div class="admin-content">
+        <!-- Toggle buttons -->
+        <button class="button add-movie-button" onclick="openModal('addMovieForm')">Add Movie</button>
+        <button class="button view-movies-button" onclick="showMovies()">View Movies</button>
+
+        <!-- Add Movie Modal -->
+        <div id="addMovieForm" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('addMovieForm')">&times;</span>
+                <h2 style="text-align: center;
+                    margin-bottom: 20px;
+                    ">Add Movie
+                </h2>
+                <div class = "text-boxes">
+                <label for="title">Title:</label>
+                <input type="text" id="title" required style="width: 100%; padding: 8px; margin-bottom: 10px; background-color: #d1d1d1;">
+                <label for="director">Director:</label>
+                <input type="text" id="director" required style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
+                <label for="rating">Rating:</label>
+                <input type="number" id="rating" required step="any" style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
+                <label for="summary">Summary:</label>
+                <input type="text" id="summary" required style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
+                <label for="duration">Duration:</label>
+                <input type="number" id="duration" required step="any" style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
+                <label for="videoLink">Video Link:</label>
+                <input type="text" id="videoLink" required style="width: 100%; padding: 8px; margin-bottom: 10px;background-color: #d1d1d1;">
+                <label for="videoLink">Picture Link:</label>
+                <input type="text" id="pictureLink" required style="width: 100%; padding: 8px; margin-bottom: 10px;">
+                </div>
+                <button class="button add-movie-button" onclick="addMovie()">Submit</button>
+                <button class="button cancel-button" onclick="closeModal('addMovieForm')">Cancel</button>
+            </div>
+        </div>
+
+        <!-- View Movies Section -->
+        <div id="viewMovies" style="display: none;">
+            <h2>View Movies</h2>
+            <div class="movie-list" id="admin-movie-list">
+                <!-- Display added movies here -->
+            </div>
+        </div>
+    </div>
+</body>
+</html>
